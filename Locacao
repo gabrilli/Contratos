@@ -1,0 +1,59 @@
+pragma solidity 0.5.1;
+contract brejas {
+    
+    string public nomeDoLocador;
+    string public nomeDoLocatario;
+    uint256 public valorDoAluguel;
+    uint public fatorMultaContratual;
+    uint public tempoDoContrato;
+    uint public tempoResidual;
+    uint public valorContratualdaMulta;
+    uint public fatorMaximoLegal;
+
+    constructor(
+        
+        string memory _locador,
+        string memory _locatario,
+        uint _valorDoAluguel,
+        uint _fatorMultaContratual,
+        uint _tempodoContrato,
+        uint _tempoResidual
+        )
+    
+    public {
+       
+        fatorMaximoLegal = 3;
+        nomeDoLocatario =_locatario;
+        nomeDoLocador = _locador;
+        valorDoAluguel = _valorDoAluguel;
+        fatorMultaContratual = _fatorMultaContratual;
+        tempoDoContrato = _tempodoContrato;
+        tempoResidual = _tempoResidual;
+        
+       
+        
+        if (fatorMultaContratual > fatorMaximoLegal) {
+            require (fatorMaximoLegal >= fatorMultaContratual, "fator ilegal");
+        }
+        
+    }
+
+    function calculaMulta() public view returns (uint256) {
+        uint256 a = valorDoAluguel*fatorMultaContratual;
+        uint b = a/tempoDoContrato;
+        uint c = b*tempoResidual;
+        return c;
+    }
+
+    function calculoMaximo() public view returns (uint256) {
+        uint256 d = valorDoAluguel*fatorMaximoLegal;
+        return d;
+        
+     }
+
+    function calcularDepreciacao (uint fatorDepreciacao) public view returns(uint256) {
+        uint a= (valorDoAluguel*fatorDepreciacao)/100;
+        return a;
+    }
+    
+}
