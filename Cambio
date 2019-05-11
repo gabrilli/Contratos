@@ -1,0 +1,69 @@
+pragma solidity 0.5.1;
+
+contract CambioSPot {
+    
+    string public _NomeComprador; //inserir nome do _NomeComprador
+    string public _NomeDoVendedor; 
+    string public _Corretor;
+    uint256 public _PTAX800;
+    uint256 public _SpreadOperacao;
+    uint256 public _ValorIOF;
+    uint256 public _QuantidadeDeMoeda;
+    string public _Moeda;
+    uint256 public _LimiteSpreadContratual;
+    uint256 public _CambioOperacional;
+    
+    constructor(
+        string memory Comprador,
+        string memory Vendedor,
+        string memory Corretor,
+        uint256 PTAX800,
+        uint256 SpreadOperacao,
+        uint256 QuantidadeDeMoeda,
+        string memory Moeda
+    )
+    
+    public {
+        
+       _NomeComprador = Comprador;
+       _NomeDoVendedor = Vendedor;
+       _Corretor = Corretor;
+       _PTAX800 = PTAX800;
+       _SpreadOperacao = SpreadOperacao;
+       _ValorIOF = 38;
+       _QuantidadeDeMoeda = QuantidadeDeMoeda;
+       _Moeda = Moeda;
+       _LimiteSpreadContratual = 5;
+       _CambioOperacional = _PTAX800+(_PTAX800*_SpreadOperacao);
+       
+       
+    
+        if (SpreadOperacao > _LimiteSpreadContratual) {
+            require (SpreadOperacao <= _LimiteSpreadContratual, "Spread acima do intervalo contratual");
+        }
+    }
+    
+    function operacaoDeCambio() public view returns (uint256) {
+        uint256 a = _QuantidadeDeMoeda*_CambioOperacional;
+        return a;
+    }
+    
+    function calculoIOF() public view returns (uint256) {
+        uint256 b = _QuantidadeDeMoeda*_CambioOperacional*_ValorIOF;
+        return b;
+    }
+    
+    function calculoCorretagem() public view returns (uint256) {
+        uint256 _Corretagem = 1875;
+        uint256 c = _QuantidadeDeMoeda*_CambioOperacional*_Corretagem;
+        return c;
+    }    
+    
+    function calculoDaOperacao() public view returns (uint256) {
+        uint256 d = (_QuantidadeDeMoeda*_CambioOperacional)+(_QuantidadeDeMoeda*_CambioOperacional*_ValorIOF);
+        return d;
+    }    
+    
+    
+}
+
