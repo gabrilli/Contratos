@@ -1,0 +1,65 @@
+pragma solidity 0.5.8;
+
+contract OSESPConcertos {
+    
+    address payable _Diretor;
+    address payable _Osesp;
+    address payable _Advogado;
+    uint256 _ParticipacaoAdvogado;
+    uint256 _ParticipacaoOsesp;
+    uint256 _ParticipacaoDiretor;
+    uint256 _DataDoConcerto = 1564689600; //01/08/2019 às 20h00
+    uint ValorDoIngresso = 1000;
+    
+     event CompraEfetuadaComSucesso (uint BRL);
+    
+  
+   modifier EventoFinalizado(){
+        require (msg.sender == _Diretor, "Operação não permitida");
+        _;
+        
+    }
+    
+    constructor (
+        address payable CarteiraDiretor,
+        address payable CarteiraOsesp,
+        address payable CarteiraAdvogado,
+        uint PercentualAdvogado,
+        uint PercentualDiretor,
+        uint PercentualOsesp
+        )
+    
+        public {
+            
+        _Diretor = CarteiraDiretor;
+        _Osesp = CarteiraOsesp;
+        _Advogado = CarteiraAdvogado;
+        _ParticipacaoAdvogado = PercentualAdvogado;
+        _ParticipacaoOsesp = PercentualOsesp;
+        _ParticipacaoDiretor = PercentualDiretor;
+        
+        
+    }
+  
+    function VendaDeIngresso (address) public payable {
+        require (now < _DataDoConcerto, "Ingressos Esgotados");
+        require (msg.value == ValorDoIngresso, "Inserir preco correto - R$ 1000");
+        
+    }
+    
+      
+    function ArrecadacaoFinal () public view returns (uint) {
+        require (msg.sender == _Diretor);
+        return address(this).balance;
+    
+    function DistribuirArrecadacao () public returns () {
+        require (now>_DataDoConcerto, "Aguarde o inicio do Concerto");
+        
+        _Diretor.transfer((_ParticipacaoDiretor/100) * address(this).balance);
+        _Advogado.transfer((_ParticipacaoAdvogado/100) * address(this).balance);
+        _Osesp.transfer ((_ParticipacaoOsesp/100) * address(this).balance);
+        
+    }
+    
+    
+}
