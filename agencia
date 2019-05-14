@@ -1,0 +1,33 @@
+pragma solidity 0.5.8;
+
+    contract AgenciaViagem {
+        
+        address payable _Agencia;
+        address _Cliente;
+        address payable _CiaArea;
+        uint256  _ValorPassagem;
+        uint256 constant _ValorSpread = 30;
+        
+        struct ListaDeInteressados {
+            address _Cliente;
+            string _CPF;    
+            
+        }
+        
+        
+        
+    constructor (
+        address payable Agencia,
+        address payable Cliente,
+        uint256 ValorPassagem
+        )
+    
+    public {
+        _Agencia = Agencia;
+        _Cliente = Cliente;
+        _ValorPassagem = ValorPassagem;
+    }
+    
+    
+    
+}
