@@ -2,32 +2,62 @@ pragma solidity 0.5.8;
 
     contract AgenciaViagem {
         
-        address payable _Agencia;
-        address _Cliente;
-        address payable _CiaArea;
-        uint256  _ValorPassagem;
-        uint256 constant _ValorSpread = 30;
+        address payable public _Agencia;
+        address payable public _CiaArea;
+        address public _Cliente;
+        uint256 public _ValorDaPassagem;
+        uint256 public _CapacidadeAeronave;
+        bool public StatusVoo;
+        bool public Reserva;
         
         struct ListaDeInteressados {
-            address _Cliente;
-            string _CPF;    
-            
+            address payable _Cliente;
+            string _Nome;
         }
         
-        
+        mapping(address => ListaDeInteressados) public ListaPassageiros;
+        ListaDeInteressados [] private sequencia; 
         
     constructor (
-        address payable Agencia,
-        address payable Cliente,
-        uint256 ValorPassagem
+        address payable CiaAerea,
+        uint256 ValorDaPassagem,
+        uint256 CapacidadeAeronave
         )
     
     public {
-        _Agencia = Agencia;
-        _Cliente = Cliente;
-        _ValorPassagem = ValorPassagem;
+        _Agencia = msg.sender;
+        _CiaArea = CiaAerea;
+        _ValorDaPassagem = ValorDaPassagem;
+        _CapacidadeAeronave = CapacidadeAeronave;
+        
+    }
+    
+    event VooConfirmado (bool StatusVoo);
+    event RerservaConfirmada (bool Reserva);
+    
+    
+    modifier AutorizacaoDeEmbarque () {
+        require (msg.sender == _Agencia, "Aguarde o chamado da Agencia");
+        _;
     }
     
     
-    
+    function Lista () public payable {
+        require (msg.value == _ValorDaPassagem, "Pague o valor correto");
+        
+        for (uint256 i=0; i<=_CapacidadeAeronave;i++) {
+           emit RerservaConfirmada(sequencia);
+            
+            
+             
+        }
+        
+        
+    }    
+        
+    function StatusVoo (bool) public view {
+        
+    }    
+        
 }
+  
