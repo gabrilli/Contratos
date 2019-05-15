@@ -4,23 +4,27 @@ pragma solidity 0.5.8;
         
         address payable public _Agencia;
         address payable public _CiaArea;
-        address public _Cliente;
         uint256 public _ValorDaPassagem;
         uint256 public _CapacidadeAeronave;
-        bool public StatusVoo;
-        bool public Reserva;
+       
         
-        struct ListaDeInteressados {
-            address payable _Cliente;
-            string _Nome;
+        struct Interessado {
+            address Cliente;
+            string Nome;
         }
         
-        mapping(address => ListaDeInteressados) public ListaPassageiros;
-        ListaDeInteressados [] private sequencia; 
+        Interessado[] public ListaPassageiros1;
+        mapping(address => Interessado) private ListaPassageiros2;
+        mapping (string => Interessado) public NomeInteressado;
+        
+        
+  
+        
         
     constructor (
         address payable CiaAerea,
         uint256 ValorDaPassagem,
+        address payable Agencia,
         uint256 CapacidadeAeronave
         )
     
@@ -32,9 +36,7 @@ pragma solidity 0.5.8;
         
     }
     
-    event VooConfirmado (bool StatusVoo);
-    event RerservaConfirmada (bool Reserva);
-    
+  
     
     modifier AutorizacaoDeEmbarque () {
         require (msg.sender == _Agencia, "Aguarde o chamado da Agencia");
@@ -42,22 +44,29 @@ pragma solidity 0.5.8;
     }
     
     
-    function Lista () public payable {
+    function FazerReserva (address Cliente, string memory Nome) public payable {
         require (msg.value == _ValorDaPassagem, "Pague o valor correto");
+        Interessado memory Passageiro = Interessado(Cliente, Nome);
         
-        for (uint256 i=0; i<=_CapacidadeAeronave;i++) {
-           emit RerservaConfirmada(sequencia);
+        ListaPassageiros1.push(Passageiro);
+        NomeInteressado[Nome] = Passageiro;
+    }    
+        
+    function Lista () public view returns () {
+        return NomeInteressado.Nome;
+    }
+        
+        
+       
+        
             
             
              
-        }
+       
         
         
-    }    
+       
         
-    function StatusVoo (bool) public view {
         
-    }    
         
 }
-  
