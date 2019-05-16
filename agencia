@@ -7,7 +7,7 @@ pragma solidity 0.5.8;
         uint256 public _ValorDaPassagem;
         uint256 public _CapacidadeAeronave;
         bool public Encerrado;
-        bool public EstornoFeito;
+        bool public Estorno;
         
        
         
@@ -40,7 +40,7 @@ pragma solidity 0.5.8;
     
   
     
-    modifier AutorizacaoDeEmbarque () {
+    modifier SomenteAgencia () {
         require (msg.sender == _Agencia, "Aguarde o chamado da Agencia");
         _;
     }
@@ -59,33 +59,34 @@ pragma solidity 0.5.8;
     }    
         
    
-    function EncerrarLista () public  {
+    function EncerrarLista () public SomenteAgencia {
         
-        require (msg.sender == _Agencia, "Somente Agencia pode encerrar a Lista");
-        
+       
         Encerrado = true;
     }    
         
-    function Estorno () public payable {
+    function Estorno1 () public SomenteAgencia payable {
         
-        require (msg.sender == _Agencia);
-        require (Encerrado = true);
+             require (Encerrado == true);
+             require (ListaA.length >= _CapacidadeAeronave);
         
         
-       for (uint256 i=_CapacidadeAeronave; i>=ListaA.length ; i++) {
+       for (uint256 i=_CapacidadeAeronave-1; i<=ListaA.length ; i++) {
+           //
           
            Interessado memory PassageiroDescartado = ListaA[i];
            
-           PassageiroDescartado.Cliente.transfer(PassageiroDescartado.Cliente._ValorDaPassagem); //deu pau, ele não aceita uma variavel, apenas o que ta dentro da struct
+           PassageiroDescartado.Cliente.transfer(_ValorDaPassagem); 
+        
            
-           EstornoFeito = true;
+           Estorno = true;
         
        }
     }    
    
    function PagarCia (uint256) public payable {
        
-       require (EstornoFeito == true);
+       require (Estorno == true);
        
        _CiaArea.transfer(address(this).balance);
        
@@ -93,5 +94,4 @@ pragma solidity 0.5.8;
    }
    
    
-}   
-      
+} 
