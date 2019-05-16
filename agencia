@@ -7,19 +7,19 @@ pragma solidity 0.5.8;
         uint256 public _ValorDaPassagem;
         uint256 public _CapacidadeAeronave;
         bool public Encerrado;
+        bool public EstornoFeito;
         
        
         
         struct Interessado {
             address payable Cliente;
             string Nome;
-            bool Reembolso;
-            uint256 VP;
         }
         
         Interessado[] public ListaA;
         
         mapping(address => Interessado) private ListaM;
+      
 
         
         
@@ -46,12 +46,12 @@ pragma solidity 0.5.8;
     }
     
     
-    function FazerReserva (address payable Cliente, string memory Nome, bool Reembolso, uint256 VP) public payable  {
+    function FazerReserva (address payable Cliente, string memory Nome) public payable  {
         
        
         require (msg.value == _ValorDaPassagem, "Pague o valor correto");
         
-        Interessado memory Passageiro = Interessado(Cliente, Nome, Reembolso, VP);
+        Interessado memory Passageiro = Interessado(Cliente, Nome);
         
         ListaA.push(Passageiro);
         
@@ -66,7 +66,7 @@ pragma solidity 0.5.8;
         Encerrado = true;
     }    
         
-    function EstornoEPagamento () public payable {
+    function Estorno () public payable {
         
         require (msg.sender == _Agencia);
         require (Encerrado = true);
@@ -76,24 +76,24 @@ pragma solidity 0.5.8;
           
            Interessado memory PassageiroDescartado = ListaA[i];
            
-           if (PassageiroDescartado.Reembolso) {
-               PassageiroDescartado.Cliente.transfer(PassageiroDescartado.VP);
-               
-               
-               
-           }
+           PassageiroDescartado.Cliente.transfer(PassageiroDescartado.Cliente._ValorDaPassagem);
            
-           
-           
-           //PassageiroDescartado.Cliente.transfer(PassageiroDescartado.A);
-           
-           
-           
+           EstornoFeito = true;
+        
        }
+    }    
+   
+   function PagarCia (uint256) public payable {
+       
+       require (EstornoFeito == true);
+       
+       _CiaArea.transfer(address(this).balance);
+       
         
-        
-    }
-        
-        
+   }
+   
+   
+}    
+     
     
       
