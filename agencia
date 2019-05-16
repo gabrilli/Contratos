@@ -6,19 +6,21 @@ pragma solidity 0.5.8;
         address payable public _CiaArea;
         uint256 public _ValorDaPassagem;
         uint256 public _CapacidadeAeronave;
+        bool public Encerrado;
+        
        
         
         struct Interessado {
-            address Cliente;
+            address payable Cliente;
             string Nome;
+            bool Reembolso;
+            uint256 VP;
         }
         
-        Interessado[] public ListaPassageiros1;
-        mapping(address => Interessado) private ListaPassageiros2;
-        mapping (string => Interessado) public NomeInteressado;
+        Interessado[] public ListaA;
         
-        
-  
+        mapping(address => Interessado) private ListaM;
+
         
         
     constructor (
@@ -29,7 +31,7 @@ pragma solidity 0.5.8;
         )
     
     public {
-        _Agencia = msg.sender;
+        _Agencia = Agencia;
         _CiaArea = CiaAerea;
         _ValorDaPassagem = ValorDaPassagem;
         _CapacidadeAeronave = CapacidadeAeronave;
@@ -44,29 +46,54 @@ pragma solidity 0.5.8;
     }
     
     
-    function FazerReserva (address Cliente, string memory Nome) public payable {
-        require (msg.value == _ValorDaPassagem, "Pague o valor correto");
-        Interessado memory Passageiro = Interessado(Cliente, Nome);
+    function FazerReserva (address payable Cliente, string memory Nome, bool Reembolso, uint256 VP) public payable  {
         
-        ListaPassageiros1.push(Passageiro);
-        NomeInteressado[Nome] = Passageiro;
+       
+        require (msg.value == _ValorDaPassagem, "Pague o valor correto");
+        
+        Interessado memory Passageiro = Interessado(Cliente, Nome, Reembolso, VP);
+        
+        ListaA.push(Passageiro);
+        
+        ListaM[Cliente] = Passageiro;
     }    
         
-    function Lista () public view returns () {
-        return NomeInteressado.Nome;
+   
+    function EncerrarLista () public  {
+        
+        require (msg.sender == _Agencia, "Somente Agencia pode encerrar a Lista");
+        
+        Encerrado = true;
+    }    
+        
+    function EstornoEPagamento () public payable {
+        
+        require (msg.sender == _Agencia);
+        require (Encerrado = true);
+        
+        
+       for (uint256 i=_CapacidadeAeronave; i>=ListaA.length ; i++) {
+          
+           Interessado memory PassageiroDescartado = ListaA[i];
+           
+           if (PassageiroDescartado.Reembolso) {
+               PassageiroDescartado.Cliente.transfer(PassageiroDescartado.VP);
+               
+               
+               
+           }
+           
+           
+           
+           //PassageiroDescartado.Cliente.transfer(PassageiroDescartado.A);
+           
+           
+           
+       }
+        
+        
     }
         
         
-       
-        
-            
-            
-             
-       
-        
-        
-       
-        
-        
-        
-}
+    
+      
