@@ -16,14 +16,14 @@ pragma solidity 0.5.8;
             string Nome;
         }
         
-        Interessado[] public ListaA;
+        Interessado[] ListaA;
         
         mapping(address => Interessado) private ListaM;
       
 
         
         
-    constructor (
+    constructor  (
         address payable CiaAerea,
         uint256 ValorDaPassagem,
         address payable Agencia,
@@ -50,6 +50,7 @@ pragma solidity 0.5.8;
         
        
         require (msg.value == _ValorDaPassagem, "Pague o valor correto");
+        require (Encerrado == false);
         
         Interessado memory Passageiro = Interessado(Cliente, Nome);
         
@@ -72,8 +73,7 @@ pragma solidity 0.5.8;
         
         
        for (uint256 i=_CapacidadeAeronave-1; i<=ListaA.length ; i++) {
-           //
-          
+           
            Interessado memory PassageiroDescartado = ListaA[i];
            
            PassageiroDescartado.Cliente.transfer(_ValorDaPassagem); 
@@ -84,7 +84,7 @@ pragma solidity 0.5.8;
        }
     }    
    
-   function PagarCia (uint256) public payable {
+   function PagarCia () public payable {
        
        require (Estorno == true);
        
