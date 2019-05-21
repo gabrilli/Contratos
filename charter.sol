@@ -97,7 +97,7 @@ contract    ContratoBroker {
         
         require (CargaAutorizada == true, "RegistreaCarga");
         
-        Preco = peso*volume*_Frete;
+         Preco = peso*volume*_Frete;
         return Preco;
         
         
