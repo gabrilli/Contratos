@@ -10,13 +10,15 @@ contract    ContratoBroker {
     uint256 _CapacidadeVolume;
     uint256 _CapacidadePeso;
     bool CargaAutorizada;
-    uint256 _volume;
-    uint256 _peso;
+    uint256 volume;
+    uint256 peso;
+    uint256 preco;
     
     bool CapacidadeEsgotada;
     
     
-    struct CargaA {
+    struct Carga {
+       
         uint256 peso;
         string conteudo;
         uint256 volume;
@@ -24,15 +26,6 @@ contract    ContratoBroker {
         
     }
     
-    struct CargaB {
-        uint256 peso;
-    }
-    
-    struct CargaC {
-        uint256 volume;
-        
-    }
-   
     constructor (
         
         address payable CarteiraBroker,
@@ -56,52 +49,59 @@ contract    ContratoBroker {
      
     }
     
-    CargaA[] ListaA;
-    CargaB[] ListaB;
-    CargaC[] ListaC;
-   
-       
-       
-       
-       event VolumeAdicionado (uint256 peso, uint256 volume);
-       
-   
-     
-     
+    Carga[]  ListaA;
+    //mapping (address => CargaB) public ListaB;
+    
+    event VolumeAdicionado (uint256 peso, uint256 volume);
     
     
-    function ConhecimentoDeCarga (uint256 peso, string memory conteudo, uint256 volume, address proprietario) public {
-       
-      
-       
-       CargaA memory CargaRegistradaA = CargaA (peso, conteudo, volume, proprietario);
-       CargaB memory CargaRegistradaB = CargaB (peso);
-       CargaC memory CargaRegistradaC = CargaC (volume);
+    function LimiteDeContratacao () public view returns (uint256) {
+        
+        uint256 LimiteP;
+        
+        for (uint i=0; i<ListaA.length; i++) {
+            LimiteP = ListaA[i].peso+LimiteP;
+        }
+        
+        uint256 CapacidadeRestanteP;
+        CapacidadeRestanteP = _CapacidadePeso - LimiteP;
+    
+        uint LimiteV;
+        for (uint i=0; i<ListaA.length; i++) {
+            LimiteV = ListaA[i].volume+LimiteV;
+        }
+        
+        uint256 CapacidadeRestanteV;
+        CapacidadeRestanteV = _CapacidadeVolume - LimiteV;
+        
+        
+        
+        
+    }   
+   
+    function ConhecimentoDeCarga (uint256 peso, string memory conteudo, uint256 volume, address proprietario)  public   {
      
-      ListaA.push (CargaRegistradaA);
-      ListaB.push (CargaRegistradaB);
-      ListaC.push (CargaRegistradaC);
-      
-      
-      
-      
-       
-       emit VolumeAdicionado (peso, volume);
-       
-       CargaAutorizada = true;
-       
+     
+     
+        
+            Carga memory CargaRegistrada = Carga (peso, conteudo, volume, proprietario);
+            ListaA.push (CargaRegistrada);
+            emit VolumeAdicionado (peso, volume);
+           
+            CargaAutorizada = true;
+        
+     
     }  
     
-     
-    function CalculoFrete (CargaB memory, CargaC memory) public view returns (uint256 Preco) {
-        
+    function CalculoFrete (uint256 Y) public view returns (uint256 Preco) {
         require (CargaAutorizada == true, "RegistreaCarga");
-        
-         Preco = peso*volume*_Frete;
+        Preco = ListaA[Y].peso*ListaA[Y].volume*_Frete;
         return Preco;
-        
-        
     }
     
+    
+    
+    
+     
      
 }
