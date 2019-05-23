@@ -1,3 +1,15 @@
+/*
+pragma solidity 0.4.4;
+
+contract C { 
+function test(uint256 a) public returns (bytes32 hash){
+    return sha3(a);
+ 
+}
+}
+https://anders.com/blockchain/hash.html
+*/
+
 pragma solidity 0.5.8;
 
 contract DigitalID {
