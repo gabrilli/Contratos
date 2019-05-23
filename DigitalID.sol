@@ -19,7 +19,8 @@ contract DigitalID {
     mapping (address => DigitalID) public ListaClientesM;
     
     
-    event NovaID (address Cliente, uint Identificador);
+    event NovaID (address Cliente, string Nome, uint256 CPF, uint256 Celular, uint256 RG, string Identificador);
+    //Identificador é a hash sha256 da strucut+Senha
     
     constructor (address payable _Onwer, uint _Valor) 
         public {
