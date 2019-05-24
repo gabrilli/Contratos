@@ -1,18 +1,6 @@
-/*
-pragma solidity 0.4.4;
-
-contract C { 
-function test(uint256 a) public returns (bytes32 hash){
-    return sha3(a);
- 
-}
-}
-https://anders.com/blockchain/hash.html
-*/
-
 pragma solidity 0.5.8;
 
-contract DigitalID {
+contract Digitalid {
     
     address payable Onwer;
     uint256 Valor;
@@ -50,9 +38,13 @@ contract DigitalID {
         ListaClientesM[Cliente] = Temp;
     }    
         
-    
-        
-       
-      
-    
+    function hash (uint i) view public returns (bytes32) {
+        return keccak256(abi.encode(ListaClientesA[i].Cliente,ListaClientesA[i].Nome, ListaClientesA[i].CPF, ListaClientesA[i].Celular,ListaClientesA[i].RG));
+    }
+
+    // function pagar contrato e dps repassar ao dono.
+ 
+ 
+ 
+ 
 }
