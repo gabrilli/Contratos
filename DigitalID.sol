@@ -29,7 +29,7 @@ contract Digitalid {
         }
     
     
-    function Cadastro (address Cliente, string memory Nome, uint256 CPF, uint256 Celular, uint256 RG, string memory Senha) public payable returns (uint) {
+    function Cadastro (address Cliente, string memory Nome, uint256 CPF, uint256 Celular, uint256 RG) public payable returns (uint) {
         
         require (msg.value == Valor, "O preco e 100 wei");
         
@@ -38,8 +38,9 @@ contract Digitalid {
         ListaClientesM[Cliente] = Temp;
     }    
         
-    function hash (uint i) view public returns (bytes32) {
-        return keccak256(abi.encode(ListaClientesA[i].Cliente,ListaClientesA[i].Nome, ListaClientesA[i].CPF, ListaClientesA[i].Celular,ListaClientesA[i].RG));
+    function hash (string memory Senha) view public returns (bytes32) {
+       uint i;
+        return keccak256(abi.encode(ListaClientesA[i].Cliente,ListaClientesA[i].Nome, ListaClientesA[i].CPF, ListaClientesA[i].Celular,ListaClientesA[i].RG, Senha));
     }
 
     // function pagar contrato e dps repassar ao dono.
