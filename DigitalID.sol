@@ -7,7 +7,7 @@ contract Digitalid {
     //bool InformcaoAnteriormenteRegistrada;
     
        struct DigitalID {
-       address Cliente;
+       address Cliente; //colocar o cliente como agente de cadastro q não precisa ser o mesmo do ID
        string Nome;
        uint256 CPF;
        uint256 Celular;
@@ -15,7 +15,7 @@ contract Digitalid {
     }
     
     DigitalID[] ListaClientesA;
-    //mapping (uint256 => DigitalID) public ListaClientesM;
+    mapping (uint256 => DigitalID) public ListaClientesM;
     
     
     event NovaID (address Cliente, string Nome, uint256 CPF, uint256 Celular, uint256 RG, bytes32 Identificador);
@@ -34,7 +34,7 @@ contract Digitalid {
         
         DigitalID memory Temp = DigitalID (Cliente, Nome, CPF, Celular, RG);
         ListaClientesA.push(Temp);
-        //ListaClientesM[CPF] = Temp;
+        ListaClientesM[CPF] = Temp;
     }    
         
     function GerarID (string memory Senha) public returns (bytes32) {
@@ -43,7 +43,7 @@ contract Digitalid {
        emit NovaID ( ListaClientesA[i].Cliente, ListaClientesA[i].Nome, ListaClientesA[i].CPF, ListaClientesA[i].Celular, ListaClientesA[i].RG, Identificador);
         return Identificador;
     
-    //Onwer.transfer(address(this).balance);
+    Onwer.transfer(address(this).balance);
         
     }
         
