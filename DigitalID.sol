@@ -12,15 +12,14 @@ contract Digitalid {
        uint256 CPF;
        uint256 Celular;
        uint256 RG;
-       
-       
-   }
+    }
+    
     DigitalID[] ListaClientesA;
-    mapping (address => DigitalID) public ListaClientesM;
+    //mapping (uint256 => DigitalID) public ListaClientesM;
     
     
-    event NovaID (address Cliente, string Nome, uint256 CPF, uint256 Celular, uint256 RG, string Identificador);
-    //Identificador é a hash sha256 da strucut+Senha
+    event NovaID (address Cliente, string Nome, uint256 CPF, uint256 Celular, uint256 RG, bytes32 Identificador);
+   
     
     constructor (address payable _Onwer, uint _Valor) 
         public {
@@ -35,17 +34,18 @@ contract Digitalid {
         
         DigitalID memory Temp = DigitalID (Cliente, Nome, CPF, Celular, RG);
         ListaClientesA.push(Temp);
-        ListaClientesM[Cliente] = Temp;
+        //ListaClientesM[CPF] = Temp;
     }    
         
-    function hash (string memory Senha) view public returns (bytes32) {
+    function GerarID (string memory Senha) public returns (bytes32) {
        uint i;
-        return keccak256(abi.encode(ListaClientesA[i].Cliente,ListaClientesA[i].Nome, ListaClientesA[i].CPF, ListaClientesA[i].Celular,ListaClientesA[i].RG, Senha));
+       bytes32 Identificador = keccak256(abi.encode(ListaClientesA[i].Cliente,ListaClientesA[i].Nome, ListaClientesA[i].CPF, ListaClientesA[i].Celular,ListaClientesA[i].RG, Senha));
+       emit NovaID ( ListaClientesA[i].Cliente, ListaClientesA[i].Nome, ListaClientesA[i].CPF, ListaClientesA[i].Celular, ListaClientesA[i].RG, Identificador);
+        return Identificador;
+    
+    //Onwer.transfer(address(this).balance);
+        
     }
+        
 
-    // function pagar contrato e dps repassar ao dono.
- 
- 
- 
- 
 }
