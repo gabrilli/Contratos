@@ -1,52 +1,60 @@
-pragma solidity 0.5.8;
+pragma solidity 0.5.9;
 
 contract Digitalid {
     
     address payable Onwer;
     uint256 Valor;
-    //bool InformcaoAnteriormenteRegistrada;
-    // colocar block.timastamp para formação do hash
+    address Parceiro;
+    
+   
     
        struct DigitalID {
-       address Cliente; //colocar o cliente como agente de cadastro q não precisa ser o mesmo do ID
        string Nome;
        uint256 CPF;
        uint256 Celular;
-       uint256 RG;
+       bytes32 Identificador;
     }
     
     DigitalID[] ListaClientesA;
-    mapping (uint256 => DigitalID) public ListaClientesM;
+    mapping (uint256 => DigitalID) public ListaClientesM1;
+    mapping (bytes32 => DigitalID) public ListaClientesM2;
+    mapping (uint256 => DigitalID) public ListaClientesM3;
+    mapping (string => DigitalID) public ListaClientesM4;
     
     
-    event NovaID (address Cliente, string Nome, uint256 CPF, uint256 Celular, uint256 RG, bytes32 Identificador);
+    
+    event NovaID (string Nome, uint256 CPF, uint256 Celular, bytes32 Identificador);
    
     
-    constructor (address payable _Onwer, uint _Valor) 
+    constructor (address payable _Onwer, uint _Valor, address _Parceiro) 
         public {
             Onwer = _Onwer;
             Valor = _Valor;
+            Parceiro = _Parceiro;
         }
     
-    
-    function Cadastro (address Cliente, string memory Nome, uint256 CPF, uint256 Celular, uint256 RG) public payable returns (uint) {
+   
+    function GerarID_Parceiro (string memory Nome, uint256 CPF, uint256 Celular, string memory Senha) public payable returns (bytes32) {
+       
+       
+       require (msg.value == Valor, "Pague o valor correto");
+       
+       bytes32 Identificador = keccak256(abi.encode(Nome, CPF, Celular, Senha));
+       
         
-        require (msg.value == Valor, "O preco e 100 wei");
-        
-        DigitalID memory Temp = DigitalID (Cliente, Nome, CPF, Celular, RG);
+        DigitalID memory Temp = DigitalID (Nome, CPF, Celular, Identificador);
         ListaClientesA.push(Temp);
-        ListaClientesM[CPF] = Temp;
-    }    
+        ListaClientesM1[CPF] = Temp;
+        ListaClientesM2[Identificador]=Temp;
+        ListaClientesM3[Celular]=Temp;
+        ListaClientesM4[Nome]=Temp;
+            
         
-    function GerarID (string memory Senha) public returns (bytes32) {
-       uint i;
-       bytes32 Identificador = keccak256(abi.encode(ListaClientesA[i].Cliente,ListaClientesA[i].Nome, ListaClientesA[i].CPF, ListaClientesA[i].Celular,ListaClientesA[i].RG, Senha));
-       emit NovaID ( ListaClientesA[i].Cliente, ListaClientesA[i].Nome, ListaClientesA[i].CPF, ListaClientesA[i].Celular, ListaClientesA[i].RG, Identificador);
-        return Identificador;
+        emit NovaID (Nome, CPF, Celular, Identificador);
+        
     
     Onwer.transfer(address(this).balance);
         
     }
-        
-
+   
 }
