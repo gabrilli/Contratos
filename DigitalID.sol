@@ -5,6 +5,7 @@ contract Digitalid {
     address payable Onwer;
     uint256 Valor;
     //bool InformcaoAnteriormenteRegistrada;
+    // colocar block.timastamp para formação do hash
     
        struct DigitalID {
        address Cliente; //colocar o cliente como agente de cadastro q não precisa ser o mesmo do ID
