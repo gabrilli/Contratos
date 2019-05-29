@@ -24,6 +24,7 @@ contract Digitalid {
     
     
     event NovaID (string Nome, uint256 CPF, uint256 Celular, bytes32 Identificador);
+    event VerificarID (bool);
    
     
     constructor (address payable _Onwer, uint _Valor, address _Parceiro) 
@@ -34,10 +35,11 @@ contract Digitalid {
         }
     
    
-    function GerarID_Parceiro (string memory Nome, uint256 CPF, uint256 Celular, string memory Senha) public payable returns (bytes32) {
+    function GerarID (string memory Nome, uint256 CPF, uint256 Celular, string memory Senha) public payable returns (bytes32) {
        
        
        require (msg.value == Valor, "Pague o valor correto");
+       
        
        bytes32 Identificador = keccak256(abi.encode(Nome, CPF, Celular, Senha));
        
@@ -56,5 +58,11 @@ contract Digitalid {
     Onwer.transfer(address(this).balance);
         
     }
+   
+   //function VerificarID () public returns (bool) {
+       
+       
+       
+   //}
    
 }
