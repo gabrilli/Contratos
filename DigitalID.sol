@@ -58,11 +58,12 @@ contract Digitalid {
     Onwer.transfer(address(this).balance);
         
     }
-   
+   */
    //function VerificarID () public returns (bool) {
+    function Deletar ID
+    
        
        
-       
-   //}
+  /*
    
 }
