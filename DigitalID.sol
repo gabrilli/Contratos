@@ -5,6 +5,7 @@ contract Digitalid {
     address payable Onwer;
     uint256 Valor;
     address Parceiro;
+    bool public IDConfirmada;
     
    
     
@@ -22,9 +23,13 @@ contract Digitalid {
     mapping (string => DigitalID) public ListaClientesM4;
     
     
+    modifier SomenteOwner () {
+        require (msg.sender == Onwer, "Operação exclusiva da Empresa");
+        _;
+    }
     
     event NovaID (string Nome, uint256 CPF, uint256 Celular, bytes32 Identificador);
-    event VerificarID (bool);
+    event VerificarID (string Nome, uint256 CPF, uint256 Celular, bytes32 Identificador);
    
     
     constructor (address payable _Onwer, uint _Valor, address _Parceiro) 
@@ -58,12 +63,22 @@ contract Digitalid {
     Onwer.transfer(address(this).balance);
         
     }
-   */
-   //function VerificarID () public returns (bool) {
-    function Deletar ID
+   
+   function VerificacaoID (bytes32 hash) public SomenteOwner returns () {
+       
+       for (uint256 i=0; i<ListaClientesA.length; i++) {
+           
+           if (hash  = ListaClientesA[i].Identificador) {
+               emit VerificarID (ListaClientesA[i].Nome, ListaClientesA[i].CPF, ListaClientesA[i].Celular, ListaClientesA[i].Identificador);
+               
+               
+           }
+          
+     //function deletar ID      
+           
+       }
     
        
        
-  /*
-   
-}
+       
+   }
